@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 export function WeddingMusic() {
   const audio = useRef<HTMLAudioElement>(null);
   const active = useRef(false);
-  const autoplayAttempted = useRef(false);
+  const [started, setStarted] = useState(false);
   const [available, setAvailable] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -30,23 +30,15 @@ export function WeddingMusic() {
 
   return <>
     <audio ref={audio} preload="metadata"
-      onLoadedMetadata={() => {
-        setAvailable(true);
-        if (!autoplayAttempted.current) {
-          autoplayAttempted.current = true;
-          // One attempt only; a blocked autoplay leaves the manual button available.
-          void audio.current?.play().catch(() => {});
-        }
-      }}
-      onPlaying={() => { setPlaying(true); setFailed(false); }}
+      onLoadedMetadata={() => setAvailable(true)}
+      onPlaying={() => { setPlaying(true); setStarted(true); setFailed(false); }}
       onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}
       onError={() => { setAvailable(false); setPlaying(false); }} />
     {available && <div className="wedding-music">
       <button className="wedding-directions" onClick={toggleMusic}>
-        <svg width="16" height="18" viewBox="0 0 20 22" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M7 17V5l10-3v12M7 8l10-3"/><ellipse cx="4" cy="18" rx="3" ry="2.5"/><ellipse cx="14" cy="15" rx="3" ry="2.5"/></svg>
-        {playing ? "Pausar música" : "Ouvir a nossa música"}
+        {playing ? "❚❚ Pausar música" : started ? "♫ Continuar nossa música" : "♫ Ouça nossa música"}
       </button>
-      {failed && <p className="music-status" role="status">Não foi possível iniciar a música. Tente novamente.</p>}
+      {failed && <p className="music-status" role="status">Não foi possível iniciar a música. Toque novamente.</p>}
     </div>}
   </>;
 }
