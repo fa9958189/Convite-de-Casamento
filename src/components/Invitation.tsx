@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import { WeddingRSVP } from "./WeddingRSVP";
+import { WeddingCountdown } from "./WeddingCountdown";
 import { WeddingMusic } from "./WeddingMusic";
 import { Link } from "react-router-dom";
 import { wedding } from "../config/wedding";
@@ -35,6 +36,7 @@ export function Invitation() {
           <h2 id="ceremony-heading">O grande dia</h2>
           <p className="wedding-date"><time dateTime="2026-10-08">{wedding.date}</time></p>
           <p className="wedding-time">{wedding.time}</p>
+          <WeddingCountdown />
           <p className="wedding-location">{wedding.location}<br />{wedding.locationDetail}</p>
           <a className="wedding-directions" href={wedding.directions} target="_blank" rel="noopener noreferrer">Como chegar à igreja <span aria-hidden="true">↗</span></a>
         </section>
